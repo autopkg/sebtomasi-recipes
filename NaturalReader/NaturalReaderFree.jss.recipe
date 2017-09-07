@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Package the latest version of JetPhoto Studio. Then, uploads to the JSS.</string>
+	<string>Package the latest version of NaturalFreeReader. Then, uploads to the JSS.</string>
 	<key>Identifier</key>
 	<string>com.github.sebtomasi.jss.NaturalFreeReader</string>
 	<key>Input</key>

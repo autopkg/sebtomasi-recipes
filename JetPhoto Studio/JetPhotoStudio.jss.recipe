@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string>Package the latest version of CaRMetal with JRE included. Then, uploads to the JSS.</string>
+	<string>Package the latest version of JetPhoto Studio. Then, uploads to the JSS.</string>
 	<key>Identifier</key>
 	<string>com.github.sebtomasi.jss.JetPhotoStudio</string>
 	<key>Input</key>

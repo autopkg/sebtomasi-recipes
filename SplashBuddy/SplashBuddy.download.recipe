@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Description</key>
-	<string></string>
+	<string>Download the latest version of SplashBuddy (App only)</string>
 	<key>Identifier</key>
 	<string>com.github.sebtomasi.download.SplashBuddy</string>
 	<key>Input</key>

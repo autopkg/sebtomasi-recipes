@@ -3,7 +3,7 @@
 <plist version="1.0">
     <dict>
         <key>Description</key>
-        <string>Intaglio est une application graphique conçu spécialement pour Mac OS X.</string>
+        <string>Downloads the current release version of Intaglio</string>
         <key>Identifier</key>
         <string>com.github.sebtomasi.download.Intaglio</string>
         <key>Input</key>

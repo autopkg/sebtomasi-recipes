@@ -24,7 +24,7 @@
 				<string>%pathname%</string>
 			</dict>
 			<key>Processor</key>
-			<string>DmgConverterLicense</string>
+			<string>com.github.sebtomasi.SharedProcessors/DmgConverterLicense</string>
 		</dict>
 		<dict>
 			<key>Processor</key>

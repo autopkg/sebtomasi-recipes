@@ -11,7 +11,7 @@
             <key>NAME</key>
             <string>Intaglio</string>
             <key>LICENSE</key>
-            <string>/Users/sebastientomasi/Desktop/temp/Scripts/com.PurgatoryDesign.Intaglio.plist</string>
+            <string></string>
         </dict>
         <key>MinimumVersion</key>
         <string>0.2.3</string>
@@ -90,7 +90,7 @@
                     <key>source_path</key>
                     <string>%LICENSE%</string>
                     <key>destination_path</key>
-                    <string>%RECIPE_DIR%/Preferences</string>
+                    <string>%RECIPE_DIR%/Preferences/com.PurgatoryDesign.Intaglio.plist</string>
                 </dict>
             </dict>
             <dict>

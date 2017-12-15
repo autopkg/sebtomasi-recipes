@@ -1,55 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>Description</key>
-	<string>Download and package the latest version of SplashBuddy (App only)</string>
-	<key>Identifier</key>
-	<string>com.github.sebtomasi.pkg.SplashBuddy</string>
-	<key>Input</key>
-	<dict>
-		<key>NAME</key>
-		<string>SplashBuddy</string>
-	</dict>
-	<key>MinimumVersion</key>
-	<string>0.2.0</string>
-	<key>ParentRecipe</key>
-	<string>com.github.sebtomasi.download.SplashBuddy</string>
-	<key>Process</key>
-	<array>
-		<dict>
-			<key>Processor</key>
-			<string>Unarchiver</string>
-			<key>Arguments</key>
-			<dict>
-                <key>purge_destination</key>
-                <string>True</string>
-			</dict>
-		</dict>
+    <dict>
+        <key>Description</key>
+        <string>Download and package the latest version of SplashBuddy (App only)</string>
+        <key>Identifier</key>
+        <string>com.github.sebtomasi.pkg.SplashBuddy</string>
+        <key>Input</key>
         <dict>
-            <key>Processor</key>
-            <string>AppPkgCreator</string>
-            <key>Arguments</key>
-            <dict>
-                <key>force_pkg_build</key>
-                <string>True</string>
-                <key>app_path</key>
-                <string>%RECIPE_CACHE_DIR%/%NAME%/%NAME%.app</string>
-            </dict>
+            <key>NAME</key>
+            <string>SplashBuddy</string>
         </dict>
-        <dict>
-            <key>Processor</key>
-            <string>PathDeleter</string>
-            <key>Arguments</key>
+        <key>MinimumVersion</key>
+        <string>0.2.0</string>
+        <key>ParentRecipe</key>
+        <string>com.github.sebtomasi.download.SplashBuddy</string>
+        <key>Process</key>
+        <array>
             <dict>
-                <key>path_list</key>
-                <string>%RECIPE_CACHE_DIR%/payload</string>
+                <key>Processor</key>
+                <string>Unarchiver</string>
+                <key>Arguments</key>
+                <dict>
+                    <key>purge_destination</key>
+                    <string>True</string>
+                </dict>
             </dict>
-        </dict>
-		<dict>
-			<key>Processor</key>
-			<string>EndOfCheckPhase</string>
-		</dict>
-	</array>
-</dict>
+            <dict>
+                <key>Processor</key>
+                <string>AppPkgCreator</string>
+                <key>Arguments</key>
+                <dict>
+                    <key>force_pkg_build</key>
+                    <string>True</string>
+                    <key>app_path</key>
+                    <string>%RECIPE_CACHE_DIR%/%NAME%/%NAME%.app</string>
+                </dict>
+            </dict>
+            <dict>
+                <key>Processor</key>
+                <string>CodeSignatureVerifier</string>
+                <key>Arguments</key>
+                <dict>
+                    <key>input_path</key>
+                    <string>%RECIPE_CACHE_DIR%/%NAME%/%NAME%.app</string>
+                    <key>requirement</key>
+                    <string>anchor apple generic and identifier "io.fti.SplashBuddy" and (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "EM3ER8T33A")</string>
+                </dict>
+            </dict>
+            <dict>
+                <key>Processor</key>
+                <string>PathDeleter</string>
+                <key>Arguments</key>
+                <dict>
+                    <key>path_list</key>
+                    <string>%RECIPE_CACHE_DIR%/payload</string>
+                </dict>
+            </dict>
+            <dict>
+                <key>Processor</key>
+                <string>EndOfCheckPhase</string>
+            </dict>
+        </array>
+    </dict>
 </plist>

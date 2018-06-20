@@ -8,6 +8,8 @@
 	<string>com.github.sebtomasi.download.legoWeDo</string>
 	<key>Input</key>
 	<dict>
+        <key>NAME</key>
+        <string>Lego WeDo</string>
 		<key>DL_URL</key>
 		<string>https://le-www-live-s.legocdn.com/downloads/WeDo2</string>
 		<key>SEARCH_PATTERN</key>

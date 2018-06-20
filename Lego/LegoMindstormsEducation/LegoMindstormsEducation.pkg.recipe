@@ -5,7 +5,7 @@
         <key>Description</key>
         <string>Download the latest version of Lego WeDo, then packages it</string>
         <key>Identifier</key>
-        <string>com.github.sebtomasi.pkg.legoMindStormsEducation</string>
+        <string>com.github.sebtomasi.pkg.LegoMindstormsEducation</string>
         <key>Input</key>
         <dict>
             <key>NAME</key>

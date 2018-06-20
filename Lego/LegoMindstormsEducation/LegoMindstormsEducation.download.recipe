@@ -5,7 +5,7 @@
 	<key>Description</key>
 	<string>Download the latest version of LegoMinstorms Education.</string>
 	<key>Identifier</key>
-	<string>com.github.sebtomasi.download.legoMindStormsEducation</string>
+	<string>com.github.sebtomasi.download.LegoMindstormsEducation</string>
 	<key>Input</key>
 	<dict>
 		<key>NAME</key>

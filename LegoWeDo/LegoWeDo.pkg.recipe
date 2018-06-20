@@ -25,30 +25,6 @@
         <array>
             <dict>
                 <key>Processor</key>
-                <string>com.github.sebtomasi.SharedProcessors/TextSubstituer</string>
-                <key>Arguments</key>
-			    <dict>
-                    <key>input_string</key>
-                    <string>%pathname%</string>
-                    <key>pattern_replace</key>
-                    <array>
-                        <dict>
-                            <key>pattern</key>
-                            <string>_Global_OSX</string>
-                            <key>repl</key>
-                            <key></key>
-                        </dict>
-                        <dict>
-                            <key>pattern</key>
-                            <string>_Full_</string>
-                            <key>repl</key>
-                            <key>-</key>
-                        </dict>
-                    </array>
-                </dict>
-            </dict>
-            <dict>
-                <key>Processor</key>
                 <string>Copier</string>
                 <key>Arguments</key>
                 <dict>
@@ -73,14 +49,20 @@
                 <key>Arguments</key>
 			    <dict>
                     <key>input_string</key>
-                    <string>%parsed_string%</string>
+                    <string>%found_filename%</string>
                     <key>pattern_replace</key>
                     <array>
                         <dict>
                             <key>pattern</key>
-                            <string>%RECIPE_CACHE_DIR%/downloads</string>
+                            <string>_Global_OSX</string>
                             <key>repl</key>
-                            <key>%RECIPE_CACHE_DIR%</key>
+                            <key></key>
+                        </dict>
+                        <dict>
+                            <key>pattern</key>
+                            <string>_Full_</string>
+                            <key>repl</key>
+                            <key>-</key>
                         </dict>
                     </array>
                 </dict>

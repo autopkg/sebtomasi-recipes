@@ -42,21 +42,12 @@
 	<key>Process</key>
 	<array>
         <dict>
-            <key>Processor</key>
-            <string>FileFinder</string>
-            <key>Arguments</key>
-            <dict>
-                <key>pattern</key>
-                <string>%RECIPE_CACHE_DIR%/*.pkg</string>
-            </dict>
-        </dict>
-        <dict>
 			<key>Processor</key>
 			<string>com.github.sebtomasi.SharedProcessors/RenameVar</string>
 			<key>Arguments</key>
 			<dict>
 				<key>input_var</key>
-				<string>%found_filename%</string>
+				<string>%target%</string>
 				<key>rename_var</key>
 				<string>pkg_path</string>
 			</dict>

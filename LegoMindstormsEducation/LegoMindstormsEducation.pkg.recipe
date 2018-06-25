@@ -3,7 +3,7 @@
 <plist version="1.0">
     <dict>
         <key>Description</key>
-        <string>Download the latest version of Lego WeDo, then packages it</string>
+        <string>Download the latest version of Lego Mindstorms Education, then packages it</string>
         <key>Identifier</key>
         <string>com.github.sebtomasi.pkg.LegoMindstormsEducation</string>
         <key>Input</key>

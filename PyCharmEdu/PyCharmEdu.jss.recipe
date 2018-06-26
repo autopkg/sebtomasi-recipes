@@ -16,8 +16,8 @@
 		<string>%NAME%-update-smart</string>
 		<key>GROUP_TEMPLATE</key>
 		<string>%RECIPE_DIR%/SmartGroupTemplate.xml</string>
-		<key>PyCharmEdu</key>
-		<string>Stellarium</string>
+		<key>NAME</key>
+		<string>PyCharmEdu</string>
 		<key>ICON</key>
 		<string>%RECIPE_DIR%/%NAME%.png</string>
 		<key>POLICY_CATEGORY</key>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>Description</key>
+        <string>Downloads the latest version of Silhouette Studio and creates a package.</string>
+        <key>Identifier</key>
+        <string>com.github.sebtomasi.pkg.SilhouetteStudio</string>
+        <key>Input</key>
+        <dict>
+            <key>NAME</key>
+            <string>Silhouette Studio</string>
+            <key>SEARCH_URL</key>
+            <string>http://silhouettefr.fr/silhouette_logiciel.html</string>
+            <key>DL_URL</key>
+            <string>http://silhouettefr.fr/file</string>
+            <key>SEARCH_PATTERN</key>
+            <string>(Version [\d.]+)</string>
+            <key>USER_AGENT</key>
+            <string>Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_3) AppleWebKit/536.28.10 (KHTML, like Gecko) Version/6.0.3 Safari/536.28.10</string>
+        </dict>
+        <key>MinimumVersion</key>
+        <string>0.2.0</string>
+        <key>ParentRecipe</key>
+	    <string>com.github.sebtomasi.download.SilhouetteStudio</string>
+        <key>Process</key>
+        <array>
+            <dict>
+                <key>Processor</key>
+                <string>AppPkgCreator</string>
+            </dict>
+            <dict>
+                <key>Processor</key>
+                <string>EndOfCheckPhase</string>
+            </dict>
+        </array>
+    </dict>
+</plist>

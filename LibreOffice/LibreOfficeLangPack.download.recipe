@@ -58,6 +58,8 @@
 			<dict>
 				<key>url</key>
 				<string>%parsed_string%</string>
+				<key>filename</key>
+				<string>%NAME%_langpack_%LANGUAGE_CODE%.dmg</string>
 			</dict>
 		</dict>
 		<dict>

@@ -8,14 +8,18 @@
 	<string>com.github.sebtomasi.jss.OpenBoard</string>
 	<key>Input</key>
 	<dict>
+		<key>NAME</key>
+		<string>OpenBoard</string>
+		<key>CONFIG_FILE</key>
+        <string>OpenBoard.config</string>
 		<key>CATEGORY</key>
 		<string>Productivity</string>
 		<key>GROUP_NAME</key>
 		<string>%NAME%-update-smart</string>
 		<key>GROUP_TEMPLATE</key>
 		<string>SmartGroupTemplate.xml</string>
-		<key>NAME</key>
-		<string>OpenBoard</string>
+		<key>BUNDLE_ID</key>
+		<string>org.oe-f.OpenBoard</string>
 		<key>POLICY_CATEGORY</key>
 		<string>Testing</string>
 		<key>POLICY_TEMPLATE</key>

@@ -89,9 +89,9 @@ class mailNotifier(Processor):
             print "Package: %s" % jss_uploaded_package
 
             if jss_uploaded_package:
-                subject = "New uploaded package for {0} is available".format(prod_name)
-                message = '''A new version of {0} has been uploaded
-                Jamf Pro Server : {1}
+                subject = "A new version of {0} is available".format(prod_name)
+                message = '''A new version of {1} has been uploaded to
+                Jamf Pro Server : {0}
                 Package : {2}
                 Version : {3}
                 Policy : {4}

@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
     <key>Description</key>
-    <string>Post-Processors for sebtomasi-recipes</string>
+    <string>Pre-Processors for sebtomasi-recipes</string>
     <key>Identifier</key>
-    <string>com.github.sebtomasi.PostProcessors</string>
+    <string>com.github.sebtomasi.PreProcessors</string>
     <key>Input</key>
     <dict/>
     <key>MinimumVersion</key>

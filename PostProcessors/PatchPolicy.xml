@@ -11,14 +11,12 @@
 	<scope>
 		<computer_groups>
 			<computer_group>
-				<id>25</id>
 				<name>Testing</name>
 			</computer_group>
 		</computer_groups>
 		<exclusions>
 			<computer_groups>
 				<computer_group>
-					<id>220</id>
 					<name>NOT MANAGED</name>
 				</computer_group>
 			</computer_groups>

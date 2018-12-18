@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<patch_software_title>
+	<name>%NAME%</name>
+	<name_id>%NAME_ID%</name_id>
+	<source_id>%SOURCE%</source_id>
+	<notifications>
+		<web_notification>false</web_notification>
+		<email_notification>false</email_notification>
+	</notifications>
+    <versions>
+        <version>
+            <software_version>%VERSION%</software_version>
+			<package>
+				<id>%PACKAGE_ID%</id>
+				<name>%PACKAGE_NAME%</name>
+			</package>
+        </version>
+    </versions>
+</patch_software_title>

@@ -25,7 +25,7 @@ __all__ = ["PatchManagement"]
 
 
 class PatchManagement(Processor):
-    description = ("Create a software tile and a patch policy scoped to a testing group, the templates SoftwareTitle.xml and PatchPolicy.xml must be placed in RecipeOverrides")
+    description = ("Create a software tile and a patch policy scoped to a testing group and exclude a NOT MANAGED group. The templates are in the parent folder")
     input_variables = {
         "jss_importer_summary_result": {
             "required": True,

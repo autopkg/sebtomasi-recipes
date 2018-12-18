@@ -77,73 +77,21 @@ class PatchManagement(Processor):
         # print headers['Accept']
         return response
 
-    def find_file_in_search_path(self, path):
-        """Search search_paths for the first existing instance of path.
-        Searches, in order, through the following directories
-        until a matching file is found:
-            1. Path as specified.
-            2. The parent folder of the path.
-            3. First ParentRecipe's folder.
-            4. First ParentRecipe's parent folder.
-            5. Second ParentRecipe's folder.
-            6. Second ParentRecipe's parent folder.
-            7. Nth ParentRecipe's folder.
-            8. Nth ParentRecipe's parent folder.
-        This search-path method is primarily in place to
-        support using recipe overrides. It allows users to avoid having
-        to copy templates, icons, etc, to the override directory.
-        Args:
-            obj_cls: JSSObject class (for the purposes of JSSIMporter a
-                Policy or a ComputerGroup)
-            path: String filename or path to file.
-                If path is just a filename, path is assumed to
-                be self.env["RECIPE_DIR"].
-        Returns:
-            Absolute path to the first match in search paths.
-        Raises:
-            ProcessorError if none of the above files exist.
-        """
-        # Ensure input is expanded.
-        path = os.path.expanduser(path)
-        # Check to see if path is a filename.
-        if not os.path.dirname(path):
-            # If so, assume that the file is meant to be in the recipe
-            # directory.
-            path = os.path.join(self.env["RECIPE_DIR"], path)
-
-        filename = os.path.basename(path)
-        parent_recipe_dirs = [os.path.dirname(parent) for parent in
-                              self.env["PARENT_RECIPES"]]
-        unique_parent_dirs = OrderedDict()
-        for parent in parent_recipe_dirs:
-            unique_parent_dirs[parent] = parent
-        search_dirs = ([os.path.dirname(path)] + unique_parent_dirs.keys())
-
-        tested = []
-        final_path = ""
-        # Look for the first file that exists in the search_dirs and
-        # their parent folders.
-        for search_dir in search_dirs:
-            test_path = os.path.join(search_dir, filename)
-            test_parent_folder_path = os.path.abspath(
-                os.path.join(search_dir, "..", filename))
-            if os.path.exists(test_path):
-                final_path = test_path
-            elif os.path.exists(test_parent_folder_path):
-                final_path = test_parent_folder_path
-            tested.append(test_path)
-            tested.append(test_parent_folder_path)
-
-            if final_path:
-                self.output("Found file: %s" % final_path)
-                break
-
-        if not final_path:
-            raise ProcessorError(
-                "Unable to find file %s at any of the following locations: %s"
-                % (filename, tested))
-
-        return final_path
+    def find_file_in_override_postprocessors_path(self, path):
+        override_path = ""
+        repo_path = ""
+        for entry in self.env["RECIPE_SEARCH_DIRS"]:
+            if os.path.exists(os.path.join(entry,"PostProcessors",path)):
+                repo_path = os.path.join(entry,"PostProcessors",path)
+                print repo_path
+        for entry in self.env["RECIPE_OVERRIDE_DIRS"]:
+            if os.path.exists(os.path.join(os.path.expanduser(entry),path)):
+                override_path = os.path.join(os.path.expanduser(entry),path)
+                print override_path
+        if override_path:
+            return override_path
+        else:
+            return repo_path
 
     def replace_text(self, text, replace_dict):  # pylint: disable=no-self-use
         """Substitute items in a text string.
@@ -173,7 +121,7 @@ class PatchManagement(Processor):
 
     def update_softwaretitle(self,replace_dict, jamf_id):
         # print self.find_file_in_search_path("SoftwareTitle.xml")
-        with open(self.find_file_in_search_path("SoftwareTitle.xml"), "r") as template_file:
+        with open(self.find_file_in_override_postprocessors_path("SoftwareTitle.xml"), "r") as template_file:
             text = template_file.read()
         template = self.replace_text(text, replace_dict)
         # print template
@@ -183,7 +131,7 @@ class PatchManagement(Processor):
         return response.status_code
 
     def create_patchpolicy(self, replace_dict):
-        with open(self.find_file_in_search_path("PatchPolicy.xml"), "r") as template_file:
+        with open(self.find_file_in_override_postprocessors_path("PatchPolicy.xml"), "r") as template_file:
             text = template_file.read()
         template = self.replace_text(text, replace_dict)
         # print template

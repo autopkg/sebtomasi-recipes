@@ -10,6 +10,8 @@
 	<dict>
 		<key>NAME</key>
 		<string>SplashBuddy</string>
+		<key>GITHUB_REPO</key>
+        <string>Shufflepuck/SplashBuddy</string>
 	</dict>
 	<key>MinimumVersion</key>
 	<string>0.2.0</string>
@@ -19,7 +21,7 @@
 			<key>Arguments</key>
 			<dict>
 				<key>github_repo</key>
-				<string>ftiff/SplashBuddy</string>
+				<string>%GITHUB_REPO%</string>
                 <key>asset_regex</key>
                 <string>%NAME%</string>
 			</dict>

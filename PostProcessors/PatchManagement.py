@@ -20,6 +20,7 @@ import json
 import requests
 import os
 import base64
+import xml.etree.ElementTree as ET
 
 __all__ = ["PatchManagement"]
 
@@ -47,32 +48,31 @@ class PatchManagement(Processor):
     output_variables = {
     }
 
-
-
     __doc__ = description
 
-    def jamf_requests(self, url, action, app_type, payload=None):
-        b64Val = base64.b64encode("{0}:{1}".format(self.env["API_USERNAME"], self.env["API_PASSWORD"]))
-        authorization = "Basic {0}".format(b64Val)
-        if action == "POST":
-            response = requests.request("GET", url, data="", headers={"Accept": "application/json", 'Authorization': authorization})
-            resp_json = json.loads(response.text)
-            if response.status_code == 200:
-                action = "PUT"
-            if "softwaretitleconfig" in url:
-                if len(resp_json['patch policies']) == 0:
-                    action = "POST"
-                for entry in resp_json["patch policies"]:
-                    patch_policy_name = "{0} - {1}".format(self.env.get("jss_importer_summary_result")["data"]["Name"],self.env.get("jss_importer_summary_result")["data"]["Version"])
-                    if entry["name"] == patch_policy_name:
-                        entry["id"]
-                        url = "{0}/JSSResource/patchpolicies/id/{1}".format(self.env["JSS_URL"], entry["id"])
-        response = requests.request(action, url, data=payload, headers={"Accept": "application/{0}".format(app_type), 'Authorization': authorization})
-        print "***********************"
-        print action, url
-        print "status code:", response.status_code
-        print "***********************"
-        return response, action
+    def jamf_requests(self, url, action, payload=None):
+        b64val = base64.b64encode("{0}:{1}".format(self.env["API_USERNAME"], self.env["API_PASSWORD"]))
+        authorization = "Basic {0}".format(b64val)
+        headers = {
+            "Accept": "application/xml",
+            'Authorization': authorization
+        }
+        url_response = requests.request(action, url, data=payload, headers=headers)
+        if url_response.status_code == 500:
+            raise Exception("The server {0} does not respond correctly".format(self.env["JSS_URL"]))
+
+        # print "***********************"
+        # print url_response.request, url
+        # print "status code:", url_response.status_code
+        # print "***********************"
+        return url_response
+
+    def xml_lookup(self, data, lookup_path):
+        root = ET.ElementTree(ET.fromstring(data))
+        found_value = []
+        for value in root.findall(lookup_path):
+            found_value.append(value.text)
+        return found_value
 
     def find_file_in_override_postprocessors_path(self, path):
         override_path = ""
@@ -100,105 +100,125 @@ class PatchManagement(Processor):
         """
         for key, value in replace_dict.iteritems():
             # Wrap our keys in % to match template tags.
-            # print "{0}: {1}".format(key,value)
             text = text.replace("%%%s%%" % key, value)
         return text
 
-    def get_obj_id(self,obj_type,obj_name):
-        url = "{0}/JSSResource/{1}/name/{2}".format(self.env["JSS_URL"],obj_type,obj_name)
-        # print url
-        response, action = self.jamf_requests(url, "GET", "json")
-        obj_data = json.loads(response.text)
-        if obj_type is "packages":
-            obj_id = obj_data["package"]["id"]
-        elif obj_type is "categories":
-            obj_id = obj_data["category"]["id"]
-        return obj_id
+    def get_pkg_id(self, pkg_name):
+        url = "{0}/JSSResource/packages/name/{1}".format(self.env["JSS_URL"], pkg_name)
+        response = self.jamf_requests(url, "GET")
+        pkg_id = self.xml_lookup(response.text, "id")
+        return pkg_id[0]
 
-    def create_update_softwaretitle(self,replace_dict, jamf_id):
+    def update_softwaretitle(self,replace_dict, jamf_id):
         with open(self.find_file_in_override_postprocessors_path("SoftwareTitle.xml"), "r") as template_file:
             text = template_file.read()
         template = self.replace_text(text, replace_dict)
         url = "{0}/JSSResource/patchsoftwaretitles/id/{1}".format(self.env["JSS_URL"],str(jamf_id))
-        response, action = self.jamf_requests(url, "POST", "xml", template)
-        return response.status_code, action
+        u_softwaretitle = self.jamf_requests(url, "PUT", template)
+        return u_softwaretitle
 
     def create_update_patchpolicy(self, replace_dict):
         with open(self.find_file_in_override_postprocessors_path("PatchPolicy.xml"), "r") as template_file:
             text = template_file.read()
         template = self.replace_text(text, replace_dict)
         url = "{0}/JSSResource/patchpolicies/softwaretitleconfig/id/{1}".format(self.env["JSS_URL"],str(replace_dict["JAMF_ID"]))
-        response, action = self.jamf_requests(url, "POST", "xml",template)
-        return response.status_code, action
+        cu_patchpolicy = self.jamf_requests(url, "POST", template)
+        return cu_patchpolicy
 
     def main(self):
         jss_importer_summary_result = self.env.get("jss_importer_summary_result")
+        jamf_id = self.env.get("softwaretitleconfig_id")
         patch_server_name = self.env.get("patch_server")
-        try:
-            url = "{0}/JSSResource/patchinternalsources/name/{1}".format(self.env["JSS_URL"],patch_server_name)
-            response, action = self.jamf_requests(url, "GET", "json")
-            patch_server = json.loads(response.text)["patch_internal_source"]
-        except Exception:
-            url = "{0}/JSSResource/patchexternalsources/name/{1}".format(self.env["JSS_URL"],patch_server_name)
-            response, action = self.jamf_requests(url, "GET", "json")
-            try:
-                patch_server = json.loads(response.text)["patch_external_source"]
-            except Exception:
-                 raise Exception('The patch server "{0}" provided does not exists on {1}'.format(patch_server_name, self.env["JSS_URL"]))
-        print "PatchServer: ", patch_server["name"]
-
+        # Checking if the Patch Server exists
+        self.output("Looking for the PatchServer {0}".format(patch_server_name))
+        url = "{0}/JSSResource/patchinternalsources/name/{1}".format(self.env["JSS_URL"], patch_server_name)
+        patch_server = self.jamf_requests(url, "GET")
+        if patch_server.status_code == 404:
+            url = "{0}/JSSResource/patchexternalsources/name/{1}".format(self.env["JSS_URL"], patch_server_name)
+            patch_server = self.jamf_requests(url, "GET")
+            if patch_server.status_code == 404:
+                raise Exception('The patch server "{0}" provided does not exists on {1}'.format(patch_server_name, self.env["JSS_URL"]))
+        self.output("The PatchServer {0} has been found on {1}".format(patch_server_name, self.env["JSS_URL"]))
+        # Checking if the Software Title exists
+        self.output('Looking for the software title "{0}"'.format(jamf_id))
+        url = "{0}/JSSResource/patchsoftwaretitles/id/{1}".format(self.env["JSS_URL"], jamf_id)
+        software_title = self.jamf_requests(url, "GET")
+        if software_title.status_code == 404:
+            raise Exception('The software title "{0}" provided does not exists on {1}'.format(jamf_id, self.env["JSS_URL"]))
+        self.output('The software title "{0}" has been found'.format(jamf_id))
+        # Checking if the Software Title comes from the Patch Server
+        source_id = self.xml_lookup(software_title.text, "source_id")[0]
+        patch_server_id = self.xml_lookup(patch_server.text, "id")[0]
+        if source_id != patch_server_id:
+            raise Exception("The software Title provided does not come from the patch server provided")
+        # Checking if the package can be added to the software title
+        patch_versions = self.xml_lookup(software_title.text, "versions/version/software_version")
+        version = jss_importer_summary_result["data"]["Version"]
+        go_ahead = False
+        for entry in patch_versions:
+            if version == entry:
+                self.output("The package's version has been found on the software title")
+                go_ahead = True
+            elif version.startswith(entry):
+                self.output("The package's version can be used for the software title for version {0}".format(entry))
+                go_ahead = True
+        if not go_ahead:
+            raise Exception("The package's version has not been found on the software title")
+        # Adding the package to the software title definition
         name = jss_importer_summary_result["data"]["Name"]
         pkg_name = jss_importer_summary_result["data"]["Package"]
-        name_id = self.env.get("name_id")
-        jamf_id = self.env.get("softwaretitleconfig_id")
-        version = jss_importer_summary_result["data"]["Version"]
-        try:
-            url = "{0}/JSSResource/patchsoftwaretitles/id/{1}".format(self.env["JSS_URL"],jamf_id)
-            response, action = self.jamf_requests(url, "GET", "json")
-            patch_software_title = json.loads(response.text)["patch_software_title"]
-        except Exception:
-            raise Exception('The software title "{0}" provided does not exists on {1}'.format(jamf_id, self.env["JSS_URL"]))
-        for entry in patch_software_title["versions"]:
-            patch_version = patch_software_title["versions"][entry]["software_version"]
-            if version.startswith(patch_version):
-                print patch_version
-                if patch_version != version:
-                    version = patch_version
-            else:
-                raise Exception('The version packaged is not listed in the software title "{0}" definition'.format(jamf_id))
-
-        print version
-        # if patch_server["name"] != "Jamf":
-        #     url = "https://{0}/patch/{1}".format(patch_server["host_name"], name_id)
-        #     response = requests.request("GET", url)
-        #     soft_def = json.loads(response.text)
-        #     for patch in soft_def["patches"]:
-        #         print patch
-        #         print patch["version"]
-        #         if version.startswith(patch["version"]):
-        #             status = True
-        #             if patch["version"] != version:
-        #                 version = patch["version"]
-        # dict_software_title = {
-        #     "NAME": name,
-        #     "NAME_ID": name_id,
-        #     "SOURCE": patch_server["id"],
-        #     "VERSION": version,
-        #     "PACKAGE_ID": str(self.get_obj_id("packages", pkg_name)),
-        #     "PACKAGE_NAME": pkg_name
-        # }
-        # dict_patch_policy = {
-        #     "NAME": name,
-        #     "JAMF_ID": jamf_id,
-        #     "VERSION": version,
-        # }
-        # if status:
-        #         softwaretitle, action = self.update_softwaretitle(dict_software_title, jamf_id)
-        #         if softwaretitle == 201:
-        #             print "The software Title '{}' has been {}".format(name, action)
-        #             patchpolicy, action = self.create_patchpolicy(dict_patch_policy)
-        #             if patchpolicy == 201:
-        #                 print "The patch policy '{} - {}' has been {}".format(name, version, action)
+        pkg_id = str(self.get_pkg_id(pkg_name))
+        name_id = self.xml_lookup(software_title.text, "name_id")[0]
+        dict_software_title = {
+            "NAME": name,
+            "NAME_ID": name_id,
+            "SOURCE": source_id,
+            "VERSION": version,
+            "PACKAGE_ID": pkg_id,
+            "PACKAGE_NAME": pkg_name
+        }
+        if pkg_name in self.xml_lookup(software_title.text, "versions/version/package/name") and pkg_id in self.xml_lookup(software_title.text, "versions/version/package/id"):
+            self.output("The package's version is already part of the software title's definition")
+        else:
+            self.output("Adding package's version to the software title's definition")
+            cu_softwaretitle = self.update_softwaretitle(dict_software_title, jamf_id)
+            if cu_softwaretitle.status_code != 201:
+                raise Exception('An error occured while updating the software title "{0}"'.format(jamf_id))
+        # Checking if a patch policy needs to be created for this software title
+        self.output('Looking for patch policies for software title "{0}"'.format(jamf_id))
+        url = "{0}/JSSResource/patchpolicies/softwaretitleconfig/id/{1}".format(self.env["JSS_URL"], jamf_id)
+        software_title_policies = self.jamf_requests(url,"GET")
+        expected_patch_policy_name = "{0} - {1}".format(jss_importer_summary_result["data"]["Name"], jss_importer_summary_result["data"]["Version"])
+        patch_policy_ids = self.xml_lookup(software_title_policies.text, "patch_policy/id")
+        patch_policy_number = len(patch_policy_ids)
+        dict_patch_policy = {
+            "NAME": name,
+            "JAMF_ID": jamf_id,
+            "VERSION": version,
+        }
+        need_patchpolicy = True
+        if software_title_policies.status_code == 200 and patch_policy_number == 0:
+            self.output('A patch policy for the software tile "{0}" needs to be created'.format(jamf_id))
+        else:
+            for entry in patch_policy_ids:
+                url = "{0}/JSSResource/patchpolicies/id/{1}".format(self.env["JSS_URL"], entry)
+                patchpolicy = self.jamf_requests(url, "GET")
+                target_version = self.xml_lookup(patchpolicy.text,"general/target_version")[0]
+                patchpolicy_name = self.xml_lookup(patchpolicy.text,"general/name")[0]
+                if version == target_version and patchpolicy_name == expected_patch_policy_name:
+                    self.output('The patch policy "{0}" already exists for the software title "{1}"'.format(expected_patch_policy_name,jamf_id))
+                    need_patchpolicy = False
+                elif version == target_version:
+                    self.output('A patch policy already exists for the "{0}" version with a different name'.format(target_version))
+                    need_patchpolicy = False
+        # Creating a patch policy for this software title
+        if need_patchpolicy:
+            self.output('No patch policy found for the software tile "{0}"'.format(jamf_id))
+            patchpolicy = self.create_update_patchpolicy(dict_patch_policy)
+            if patchpolicy.status_code == 201:
+                self.output('The patch policy "{0}" has been created for the software title "{1}"'.format(expected_patch_policy_name, jamf_id))
+        else:
+            self.output("No patch policy had been created")
 
 
 if __name__ == "__main__":

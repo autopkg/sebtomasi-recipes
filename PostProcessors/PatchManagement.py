@@ -36,10 +36,6 @@ class PatchManagement(Processor):
             "required": True,
             "description": ("Patch server where the definition exists")
         },
-        "name_id":{
-            "required": False,
-            "description": ("Application name of the software")
-        },
         "softwaretitleconfig_id":{
             "required": True,
             "description": ("Jamf software title settings ID")
@@ -139,6 +135,7 @@ class PatchManagement(Processor):
             if patch_server.status_code == 404:
                 raise Exception('The patch server "{0}" provided does not exists on {1}'.format(patch_server_name, self.env["JSS_URL"]))
         self.output("The PatchServer {0} has been found on {1}".format(patch_server_name, self.env["JSS_URL"]))
+
         # Checking if the Software Title exists
         self.output('Looking for the software title "{0}"'.format(jamf_id))
         url = "{0}/JSSResource/patchsoftwaretitles/id/{1}".format(self.env["JSS_URL"], jamf_id)
@@ -146,6 +143,7 @@ class PatchManagement(Processor):
         if software_title.status_code == 404:
             raise Exception('The software title "{0}" provided does not exists on {1}'.format(jamf_id, self.env["JSS_URL"]))
         self.output('The software title "{0}" has been found'.format(jamf_id))
+
         # Checking if the Software Title comes from the Patch Server
         source_id = self.xml_lookup(software_title.text, "source_id")[0]
         patch_server_id = self.xml_lookup(patch_server.text, "id")[0]
@@ -161,6 +159,7 @@ class PatchManagement(Processor):
                 go_ahead = True
             elif version.startswith(entry):
                 self.output("The package's version can be used for the software title for version {0}".format(entry))
+                version = entry
                 go_ahead = True
         if not go_ahead:
             raise Exception("The package's version has not been found on the software title")
@@ -182,6 +181,10 @@ class PatchManagement(Processor):
         else:
             self.output("Adding package's version to the software title's definition")
             cu_softwaretitle = self.update_softwaretitle(dict_software_title, jamf_id)
+            print "******************"
+            print dict_software_title
+            print cu_softwaretitle.text
+            print "******************"
             if cu_softwaretitle.status_code != 201:
                 raise Exception('An error occured while updating the software title "{0}"'.format(jamf_id))
         # Checking if a patch policy needs to be created for this software title
@@ -217,6 +220,8 @@ class PatchManagement(Processor):
             patchpolicy = self.create_update_patchpolicy(dict_patch_policy)
             if patchpolicy.status_code == 201:
                 self.output('The patch policy "{0}" has been created for the software title "{1}"'.format(expected_patch_policy_name, jamf_id))
+            else:
+                raise Exception('An error occurred while creating the patch policy')
         else:
             self.output("No patch policy had been created")
 

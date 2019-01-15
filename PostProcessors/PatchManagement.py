@@ -42,6 +42,9 @@ class PatchManagement(Processor):
         },
     }
     output_variables = {
+        "PatchManagement_summary_result": {
+            "description": "Description of interesting results."
+        },
     }
 
     __doc__ = description
@@ -121,6 +124,31 @@ class PatchManagement(Processor):
         cu_patchpolicy = self.jamf_requests(url, "POST", template)
         return cu_patchpolicy
 
+    def summarize(self, report):
+        """If anything has been added or updated, report back."""
+        # Only summarize if something has happened.
+        # if any(value for value in self.env["jss_changed_objects"].values()):
+            # Create a blank summary.
+        self.env["PatchManagement_summary_result"] = {
+            "summary_text": "The following changes were made to the Patch Management:",
+            "report_fields": [
+                "Patch Server", "Software title", "Software title version", "Package", "Version", "Patch policy",
+                "Package Uploaded"
+            ],
+            "data": {
+                "Patch Server": "",
+                "Software title": "",
+                "Software title version": "",
+                "Package": "",
+                "Version": "",
+                "Patch policy": "",
+                "Package Uploaded": "",
+            }
+        }
+        data = self.env["PatchManagement_summary_result"]["data"]
+        for entry in report:
+            data[entry] = report[entry]
+
     def main(self):
         jss_importer_summary_result = self.env.get("jss_importer_summary_result")
         jamf_id = self.env.get("softwaretitleconfig_id")
@@ -145,19 +173,22 @@ class PatchManagement(Processor):
         self.output('The software title "{0}" has been found'.format(jamf_id))
 
         # Checking if the Software Title comes from the Patch Server
+        softwaretitle_name = self.xml_lookup(software_title.text, "name")[0]
         source_id = self.xml_lookup(software_title.text, "source_id")[0]
         patch_server_id = self.xml_lookup(patch_server.text, "id")[0]
         if source_id != patch_server_id:
             raise Exception("The software Title provided does not come from the patch server provided")
         # Checking if the package can be added to the software title
         patch_versions = self.xml_lookup(software_title.text, "versions/version/software_version")
-        version = jss_importer_summary_result["data"]["Version"]
+        pkg_version = jss_importer_summary_result["data"]["Version"]
+        version = ""
         go_ahead = False
         for entry in patch_versions:
-            if version == entry:
+            if pkg_version == entry:
                 self.output("The package's version has been found on the software title")
+                version = entry
                 go_ahead = True
-            elif version.startswith(entry):
+            elif pkg_version.startswith(entry):
                 self.output("The package's version can be used for the software title for version {0}".format(entry))
                 version = entry
                 go_ahead = True
@@ -224,6 +255,16 @@ class PatchManagement(Processor):
                 raise Exception('An error occurred while creating the patch policy')
         else:
             self.output("No patch policy had been created")
+        data_report = {
+            "Patch policy": expected_patch_policy_name,
+            "Software title version": version,
+            "Patch Server": patch_server_name,
+            "Software title": name,
+            "Version": pkg_version,
+            "Package": pkg_name,
+            "Package Uploaded": jss_importer_summary_result["data"]["Package_Uploaded"],
+        }
+        self.summarize(data_report)
 
 
 if __name__ == "__main__":

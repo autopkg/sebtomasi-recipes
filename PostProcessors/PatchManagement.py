@@ -143,7 +143,7 @@ class PatchManagement(Processor):
         }
         data = self.env["PatchManagement_summary_result"]["data"]
         for entry in report:
-            data[entry] = report[entry]
+            data[entry] = report[entry] if report[entry] else ""
 
     def main(self):
         jss_importer_summary_result = self.env.get("jss_importer_summary_result")

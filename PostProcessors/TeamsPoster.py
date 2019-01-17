@@ -32,7 +32,7 @@ class TeamsPoster(Processor):
         },
         "trigger_key":{
             "required": False,
-            "description": ("The key from the summary that will trigger the post, the key value must be a boolean")
+            "description": ("The key from the summary that will trigger the post, the key value must be a boolean. If there isn't any key, the summary will always be posted")
         },
         "webhook_url": {
             "required": True,

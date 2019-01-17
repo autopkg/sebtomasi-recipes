@@ -128,7 +128,7 @@ class PatchManagement(Processor):
             "summary_text": "The following changes were made to the Patch Management:",
             "report_fields": [
                 "Patch Server", "Software title", "Software title version", "Package", "Version", "Patch policy",
-                "Package Uploaded", "Patch policy created or modified"
+                "Package Uploaded", "Patch policy modified"
             ],
             "data": {
                 "Patch Server": "",
@@ -138,12 +138,12 @@ class PatchManagement(Processor):
                 "Version": "",
                 "Patch policy": "",
                 "Package Uploaded": "",
-                "Patch policy created or modified": ""
+                "Patch policy modified": ""
             }
         }
         data = self.env["PatchManagement_summary_result"]["data"]
         for entry in report:
-            data[entry] = report[entry] if report[entry] else ""
+            data[entry] = report[entry] if report[entry] else "No"
 
     def main(self):
         jss_importer_summary_result = self.env.get("jss_importer_summary_result")
@@ -257,7 +257,7 @@ class PatchManagement(Processor):
             "Version": pkg_version,
             "Package": pkg_name,
             "Package Uploaded": jss_importer_summary_result["data"]["Package_Uploaded"],
-            "Patch policy created or modified": patchpolicy_created,
+            "Patch policy modified": patchpolicy_created,
         }
         self.summarize(data_report)
 

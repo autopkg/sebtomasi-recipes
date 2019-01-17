@@ -128,7 +128,7 @@ class PatchManagement(Processor):
             "summary_text": "The following changes were made to the Patch Management:",
             "report_fields": [
                 "Patch Server", "Software title", "Software title version", "Package", "Version", "Patch policy",
-                "Package Uploaded"
+                "Package Uploaded", "Patch policy created or modified"
             ],
             "data": {
                 "Patch Server": "",
@@ -138,6 +138,7 @@ class PatchManagement(Processor):
                 "Version": "",
                 "Patch policy": "",
                 "Package Uploaded": "",
+                "Patch policy created or modified": ""
             }
         }
         data = self.env["PatchManagement_summary_result"]["data"]
@@ -242,10 +243,12 @@ class PatchManagement(Processor):
             patchpolicy = self.create_update_patchpolicy(dict_patch_policy)
             if patchpolicy.status_code == 201:
                 self.output('The patch policy "{0}" has been created for the software title "{1}"'.format(expected_patch_policy_name, jamf_id))
+                patchpolicy_created = True
             else:
                 raise Exception('An error occurred while creating the patch policy')
         else:
             self.output("No patch policy had been created")
+            patchpolicy_created = False
         data_report = {
             "Patch policy": expected_patch_policy_name,
             "Software title version": version,
@@ -254,6 +257,7 @@ class PatchManagement(Processor):
             "Version": pkg_version,
             "Package": pkg_name,
             "Package Uploaded": jss_importer_summary_result["data"]["Package_Uploaded"],
+            "Patch policy created or modified": patchpolicy_created,
         }
         self.summarize(data_report)
 

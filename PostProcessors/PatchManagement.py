@@ -59,11 +59,6 @@ class PatchManagement(Processor):
         url_response = requests.request(action, url, data=payload, headers=headers)
         if url_response.status_code == 500:
             raise Exception("The server {0} does not respond correctly".format(self.env["JSS_URL"]))
-
-        # print "***********************"
-        # print url_response.request, url
-        # print "status code:", url_response.status_code
-        # print "***********************"
         return url_response
 
     def xml_lookup(self, data, lookup_path):
@@ -212,10 +207,6 @@ class PatchManagement(Processor):
         else:
             self.output("Adding package's version to the software title's definition")
             cu_softwaretitle = self.update_softwaretitle(dict_software_title, jamf_id)
-            print "******************"
-            print dict_software_title
-            print cu_softwaretitle.text
-            print "******************"
             if cu_softwaretitle.status_code != 201:
                 raise Exception('An error occured while updating the software title "{0}"'.format(jamf_id))
         # Checking if a patch policy needs to be created for this software title

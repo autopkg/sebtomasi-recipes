@@ -250,14 +250,14 @@ class PatchManagement(Processor):
             self.output("No patch policy had been created")
             patchpolicy_created = False
         data_report = {
-            "Patch policy": expected_patch_policy_name,
-            "Software title version": version,
-            "Patch Server": patch_server_name,
-            "Software title": name,
-            "Version": pkg_version,
-            "Package": pkg_name,
+            "Patch policy": str(expected_patch_policy_name),
+            "Software title version": str(version),
+            "Patch Server": str(patch_server_name),
+            "Software title": str(name),
+            "Version": str(pkg_version),
+            "Package": str(pkg_name),
             "Package Uploaded": jss_importer_summary_result["data"]["Package_Uploaded"],
-            "Patch policy modified": patchpolicy_created,
+            "Patch policy modified": str(patchpolicy_created),
         }
         self.summarize(data_report)
 

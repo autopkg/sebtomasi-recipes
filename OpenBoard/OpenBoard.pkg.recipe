@@ -61,7 +61,7 @@
 				<key>destination_path</key>
 				<string>%pkgroot%/Applications/OpenBoard.app/Contents/Resources/etc</string>
 				<key>source_path</key>
-				<string>%CONFIG_FILE%</string>
+				<string>%RECIPE_DIR%/%CONFIG_FILE%</string>
 			</dict>
 			<key>Processor</key>
 			<string>Copier</string>

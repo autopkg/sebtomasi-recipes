@@ -2,66 +2,51 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Description</key>
-	<string>Download the latest version of LegoMinstorms Education.</string>
-	<key>Identifier</key>
-	<string>com.github.sebtomasi.download.LegoMindstormsEducation</string>
-	<key>Input</key>
-	<dict>
-		<key>NAME</key>
+    <key>Description</key>
+    <string>Download the latest version of LegoMinstorms Education.</string>
+    <key>Identifier</key>
+    <string>com.github.sebtomasi.download.LegoMindstormsEducation</string>
+    <key>Input</key>
+    <dict>
+        <key>NAME</key>
         <string>LEGO MINDSTORMS Education EV3</string>
-		<key>DL_URL</key>
-		<string>https://le-www-live-s.legocdn.com/downloads/LME-EV3</string>
-		<key>LANGUAGE_CODE</key>
-		<string>fr-FR</string>
-		<key>SEARCH_PATTERN</key>
-		<string>(LME-EV3_Full-setup_[\d.]+_%LANGUAGE_CODE%_OSX.dmg)</string>
-		<key>SEARCH_URL</key>
-		<string>https://education.lego.com/en-us/downloads/mindstorms-ev3/software</string>
-	</dict>
-	<key>MinimumVersion</key>
-	<string>0.2.9</string>
-	<key>Process</key>
-	<array>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>re_pattern</key>
-				<string>%SEARCH_PATTERN%</string>
-				<key>url</key>
-				<string>%SEARCH_URL%</string>
-			</dict>
-			<key>Processor</key>
-			<string>URLTextSearcher</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>url</key>
-				<string>%DL_URL%/%match%</string>
-			</dict>
-			<key>Processor</key>
-			<string>URLDownloader</string>
-		</dict>
-		<dict>
-			<key>Arguments</key>
-			<dict>
-				<key>expected_authority_names</key>
-				<array>
-					<string>Developer ID Installer: National Instruments (SKTKK2QZ74)</string>
-					<string>Developer ID Certification Authority</string>
-					<string>Apple Root CA</string>
-				</array>
-				<key>input_path</key>
-				<string>%pathname%/LEGO*.*pkg</string>
-			</dict>
-			<key>Processor</key>
-			<string>CodeSignatureVerifier</string>
-		</dict>
-		<dict>
-			<key>Processor</key>
-			<string>EndOfCheckPhase</string>
-		</dict>
-	</array>
+        <key>DL_URL</key>
+        <string>https://le-www-live-s.legocdn.com/downloads/LME-EV3</string>
+        <key>LANGUAGE_CODE</key>
+        <string>fr-FR</string>
+        <key>SEARCH_PATTERN</key>
+        <string>(LME-EV3_Full-setup_[\d.]+_%LANGUAGE_CODE%_OSX.dmg)</string>
+        <key>SEARCH_URL</key>
+        <string>https://education.lego.com/en-us/downloads/mindstorms-ev3/software</string>
+    </dict>
+    <key>MinimumVersion</key>
+    <string>0.2.9</string>
+    <key>Process</key>
+    <array>
+        <dict>
+            <key>Arguments</key>
+            <dict>
+                <key>re_pattern</key>
+                <string>%SEARCH_PATTERN%</string>
+                <key>url</key>
+                <string>%SEARCH_URL%</string>
+            </dict>
+            <key>Processor</key>
+            <string>URLTextSearcher</string>
+        </dict>
+        <dict>
+            <key>Arguments</key>
+            <dict>
+                <key>url</key>
+                <string>%DL_URL%/%match%</string>
+            </dict>
+            <key>Processor</key>
+            <string>URLDownloader</string>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>EndOfCheckPhase</string>
+        </dict>
+    </array>
 </dict>
 </plist>

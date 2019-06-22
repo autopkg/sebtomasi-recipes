@@ -46,7 +46,7 @@
                         <key>pattern</key>
                         <string>.dmg</string>
                         <key>repl</key>
-                        <key>_langpack_%LANGUAGE_CODE%.dmg</key>
+                        <string>_langpack_%LANGUAGE_CODE%.dmg</string>
                     </dict>
                 </array>
 			</dict>

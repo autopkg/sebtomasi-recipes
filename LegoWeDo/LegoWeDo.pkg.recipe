@@ -56,13 +56,13 @@
                             <key>pattern</key>
                             <string>_Global_OSX</string>
                             <key>repl</key>
-                            <key></key>
+                            <string></string>
                         </dict>
                         <dict>
                             <key>pattern</key>
                             <string>_Full_</string>
                             <key>repl</key>
-                            <key>-</key>
+                            <string>-</string>
                         </dict>
                     </array>
                 </dict>

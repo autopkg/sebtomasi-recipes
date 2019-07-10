@@ -52,7 +52,7 @@
                             <key>pattern</key>
                             <string>Version </string>
                             <key>repl</key>
-                            <key></key>
+                            <string></string>
                         </dict>
                     </array>
                 </dict>

@@ -58,13 +58,13 @@
                             <key>pattern</key>
                             <string>%RECIPE_CACHE_DIR%/downloads/LME-EV3_Full-setup_</string>
                             <key>repl</key>
-                            <key></key>
+                            <string></string>
                         </dict>
                         <dict>
                             <key>pattern</key>
                             <string>_%LANGUAGE_CODE%_OSX.dmg</string>
                             <key>repl</key>
-                            <key></key>
+                            <string></string>
                         </dict>
                     </array>
                 </dict>

@@ -67,19 +67,19 @@
                         <key>pattern</key>
                         <string>_</string>
                         <key>repl</key>
-                        <key> </key>
+                        <string> </string>
                     </dict>
                     <dict>
                         <key>pattern</key>
                         <string>mac</string>
                         <key>repl</key>
-                        <key></key>
+                        <string></string>
                     </dict>
                     <dict>
                         <key>pattern</key>
                         <string>.zip</string>
                         <key>repl</key>
-                        <key>.dmg</key>
+                        <string>.dmg</string>
                     </dict>
                 </array>
 			</dict>
@@ -91,5 +91,3 @@
     </array>
 </dict>
 </plist>
-
-

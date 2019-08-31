@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import absolute_import
+from __future__ import print_function
 import subprocess
 import time
 import shutil
@@ -33,7 +35,7 @@ class DmgConverterLicense(Processor):
         new_dmg = re.sub(".dmg","",dmg)+"_Converted"
         #####Remove a license agreement from the dmg
         subprocess.check_call(["/usr/bin/hdiutil","convert","-quiet",dmg,"-format","UDTO","-o",new_dmg ])
-        print new_dmg+".cdr"
+        print(new_dmg+".cdr")
         shutil.move(new_dmg+".cdr",new_dmg+".dmg")
         self.env["pathname"] = new_dmg+".dmg"
 

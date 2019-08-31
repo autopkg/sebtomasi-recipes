@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
 from autopkglib import Processor, ProcessorError
 
 import requests
@@ -80,7 +82,7 @@ class TeamsPoster(Processor):
         trigger = True
 
         if trigger_key in processor_summary_result["data"].keys():
-            print "Trigger key: ", trigger_key
+            print("Trigger key: ", trigger_key)
             # trigger = processor_summary_result["data"][trigger_key]
             trigger = False if not processor_summary_result["data"][trigger_key] else True
 

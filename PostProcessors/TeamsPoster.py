@@ -66,7 +66,7 @@ class TeamsPoster(Processor):
         payload["sections"].append(activityTitle)
 
         for entry in summary_result["data"]:
-            # print "{0} : {1}".format(entry, summary_result["data"][entry])
+            # print("{0} : {1}".format(entry, summary_result["data"][entry]))
             key_summary={
                 "name": entry,
                 "value": summary_result["data"][entry]

@@ -30,7 +30,7 @@ class DmgConverterLicense(Processor):
 
     def main(self):
         dmg = self.env["dmg_path"]
-        new_dmg = re.sub(".dmg","",dmg)+"_Converted"
+        new_dmg = re.sub(r".dmg","",dmg)+"_Converted"
         #####Remove a license agreement from the dmg
         subprocess.check_call(["/usr/bin/hdiutil","convert","-quiet",dmg,"-format","UDTO","-o",new_dmg ])
         print(new_dmg+".cdr")

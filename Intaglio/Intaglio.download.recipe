@@ -11,11 +11,11 @@
             <key>NAME</key>
             <string>Intaglio</string>
             <key>SEARCH_URL</key>
-            <string>http://www.purgatorydesign.com/Intaglio/download.html</string>
+            <string>https://www.purgatorydesign.com/Intaglio/download.html</string>
             <key>SEARCH_PATTERN</key>
             <string>(%NAME%.dmg.zip)</string>
             <key>DL_URL</key>
-            <string>http://www.purgatorydesign.com/Intaglio</string>
+            <string>https://www.purgatorydesign.com/Intaglio</string>
         </dict>
         <key>MinimumVersion</key>
         <string>0.2.0</string>

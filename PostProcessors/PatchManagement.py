@@ -15,13 +15,14 @@
 # limitations under the License.
 
 from __future__ import absolute_import
-from autopkglib import Processor, ProcessorError
 
-import json
-import requests
-import os
 import base64
+import os
 import xml.etree.ElementTree as ET
+
+import requests
+
+from autopkglib import Processor, ProcessorError
 
 __all__ = ["PatchManagement"]
 

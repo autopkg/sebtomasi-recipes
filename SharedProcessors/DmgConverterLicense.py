@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 
-from __future__ import absolute_import
-from __future__ import print_function
-import subprocess
-import time
-import shutil
+from __future__ import absolute_import, print_function
+
 import re
+import shutil
+import subprocess
 
 from autopkglib import Processor, ProcessorError
-from autopkglib.DmgMounter import DmgMounter
 
 __all__ = ["DmgConverterLicense"]
 
@@ -20,16 +18,16 @@ class DmgConverterLicense(Processor):
             "description": "string",
         },
     }
-    
+
     output_variables = {
         "pathname":{
             "required": True,
             "description": "Path to the converted file.",
         },
     }
-   
+
     description = __doc__
-     
+
     def main(self):
         dmg = self.env["dmg_path"]
         new_dmg = re.sub(".dmg","",dmg)+"_Converted"

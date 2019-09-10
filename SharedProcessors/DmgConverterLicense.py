@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
-import subprocess
-import time
-import shutil
+from __future__ import absolute_import, print_function
+
 import re
+import shutil
+import subprocess
 
 from autopkglib import Processor, ProcessorError
-from autopkglib.DmgMounter import DmgMounter
 
 __all__ = ["DmgConverterLicense"]
 
@@ -18,22 +18,22 @@ class DmgConverterLicense(Processor):
             "description": "string",
         },
     }
-    
+
     output_variables = {
         "pathname":{
             "required": True,
             "description": "Path to the converted file.",
         },
     }
-   
+
     description = __doc__
-     
+
     def main(self):
         dmg = self.env["dmg_path"]
-        new_dmg = re.sub(".dmg","",dmg)+"_Converted"
+        new_dmg = re.sub(r".dmg","",dmg)+"_Converted"
         #####Remove a license agreement from the dmg
         subprocess.check_call(["/usr/bin/hdiutil","convert","-quiet",dmg,"-format","UDTO","-o",new_dmg ])
-        print new_dmg+".cdr"
+        print(new_dmg+".cdr")
         shutil.move(new_dmg+".cdr",new_dmg+".dmg")
         self.env["pathname"] = new_dmg+".dmg"
 

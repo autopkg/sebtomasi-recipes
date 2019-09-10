@@ -14,9 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from autopkglib import Processor, ProcessorError
+from __future__ import absolute_import, print_function
 
 import requests
+
+from autopkglib import Processor, ProcessorError
 
 __all__ = ["TeamsPoster"]
 
@@ -64,7 +66,7 @@ class TeamsPoster(Processor):
         payload["sections"].append(activityTitle)
 
         for entry in summary_result["data"]:
-            # print "{0} : {1}".format(entry, summary_result["data"][entry])
+            # print("{0} : {1}".format(entry, summary_result["data"][entry]))
             key_summary={
                 "name": entry,
                 "value": summary_result["data"][entry]
@@ -80,7 +82,7 @@ class TeamsPoster(Processor):
         trigger = True
 
         if trigger_key in processor_summary_result["data"].keys():
-            print "Trigger key: ", trigger_key
+            print("Trigger key: ", trigger_key)
             # trigger = processor_summary_result["data"][trigger_key]
             trigger = False if not processor_summary_result["data"][trigger_key] else True
 

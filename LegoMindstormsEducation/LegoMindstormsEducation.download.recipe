@@ -9,13 +9,13 @@
     <key>Input</key>
     <dict>
         <key>NAME</key>
-        <string>LEGO MINDSTORMS Education EV3</string>
+        <string>EV3 Classroom</string>
         <key>DL_URL</key>
-        <string>https://le-www-live-s.legocdn.com/downloads/LME-EV3</string>
+        <string>https://le-www-live-s.legocdn.com/downloads/LME-Scratch</string>
         <key>LANGUAGE_CODE</key>
-        <string>fr-FR</string>
+        <string>en-US</string>
         <key>SEARCH_PATTERN</key>
-        <string>(LME-EV3_Full-setup_[\d.]+_%LANGUAGE_CODE%_OSX.dmg)</string>
+        <string>(LME-Scratch_Full-setup_[\d.]+_%LANGUAGE_CODE%_MacOS.dmg)</string>
         <key>SEARCH_URL</key>
         <string>https://education.lego.com/en-us/downloads/mindstorms-ev3/software</string>
     </dict>

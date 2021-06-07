@@ -64,7 +64,7 @@
 				<key>destination_path</key>
 				<string>%RECIPE_CACHE_DIR%</string>
 				<key>source_path</key>
-				<string>%pathname%/LibreOffice Language Pack.app/Contents/tarball.tar.bz2</string>
+				<string>%pathname%/LibreOffice Language Pack.app/Contents/*/tarball.tar.bz2</string>
 			</dict>
 			<key>Processor</key>
 			<string>Copier</string>

@@ -13,7 +13,7 @@
             <key>SEARCH_URL</key>
             <string>http://silhouettefr.fr/silhouette_logiciel.html</string>
             <key>DL_URL</key>
-            <string>http://silhouettefr.fr/file</string>
+            <string>https://silhouettefr.fr/file</string>
             <key>SEARCH_PATTERN</key>
             <string>(Version [\d.]+)</string>
             <key>USER_AGENT</key>

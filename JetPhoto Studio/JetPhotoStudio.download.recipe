@@ -11,7 +11,7 @@
         <key>NAME</key>
         <string>JetPhoto Studio</string>
         <key>SEARCH_URL</key>
-        <string>http://www.jetphotosoft.com/web/?s=downloads</string>
+        <string>https://www.jetphotosoft.com/web/?s=downloads</string>
         <key>SEARCH_PATTERN</key>
         <string>(JetPhoto_Studio_mac[0-9].[0-9].zip)</string>
         <key>DL_URL</key>

@@ -15,7 +15,7 @@
         <key>SEARCH_PATTERN</key>
         <string>(JetPhoto_Studio_mac[0-9].[0-9].zip)</string>
         <key>DL_URL</key>
-        <string>http://www.jetphotosoft.com/web/download/</string>
+        <string>https://www.jetphotosoft.com/web/download/</string>
     </dict>
     <key>MinimumVersion</key>
     <string>0.2.9</string>

@@ -28,7 +28,7 @@
             <dict>
                 <key>warning_message</key>
                 <string>The sebtomasi-recipes repo, which includes this recipe, is deprecated and will be removed in the future (details: https://github.com/autopkg/sebtomasi-recipes/issues/26).
-                
+
 Please search for alternative recipes at autopkgweb.com. If you host a recipe repo in the AutoPkg org and want to take ownership of this recipe, please comment in the issue linked above.</string>
             </dict>
         </dict>
@@ -51,6 +51,10 @@ Please search for alternative recipes at autopkgweb.com. If you host a recipe re
                 <key>url</key>
                 <string>%DL_URL%/%match%</string>
             </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>EndOfCheckPhase</string>
         </dict>
         <dict>
             <key>Processor</key>
@@ -95,10 +99,6 @@ Please search for alternative recipes at autopkgweb.com. If you host a recipe re
                 </array>
 			</dict>
 		</dict>
-        <dict>
-            <key>Processor</key>
-            <string>EndOfCheckPhase</string>
-        </dict>
     </array>
 </dict>
 </plist>
